@@ -2,7 +2,7 @@
 
 Start date: *September 22, 2026 (Tuesday)*
 
-By Mark Jason T. Galang
+By Mark Jason T. Galang ([@markjasongalang](https://github.com/markjasongalang))
 
 ## Overview
 
