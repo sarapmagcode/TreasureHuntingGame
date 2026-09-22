@@ -1,0 +1,114 @@
+package main;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class GamePanel extends JPanel implements Runnable {
+    // SCREEN SETTINGS
+    final int originalTileSize = 16; // 16x16 tile
+    final int scale = 3;
+
+    final int tileSize = originalTileSize * scale; // 48x48 tile
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
+    final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+
+    // FPS
+    int FPS = 60;
+
+    KeyHandler keyH = new KeyHandler();
+    Thread gameThread;
+
+    // Set player's default position
+    int playerX = 100;
+    int playerY = 100;
+    int playerSpeed = 4;
+
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.BLACK);
+
+        // If set to true, all the drawing from this component will be done in an off-screen
+        // painting buffer. In short, enabling this can improve game's rendering performance.
+        this.setDoubleBuffered(true);
+
+        this.addKeyListener(keyH);
+        this.setFocusable(true); // With this, GamePanel can be "focused" to receive key input.
+    }
+
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start(); // Calls the run() below
+    }
+
+    /**
+     * Sleep method
+     */
+    @Override
+    public void run() {
+        double drawInterval = 1_000_000_000 / FPS; // 0.0166667 seconds
+        double nextDrawTime = System.nanoTime() + drawInterval; // The allocated time for a single loop is 0.0166667 seconds
+
+        while (gameThread != null) {
+//            System.out.println("The game loop is running");
+
+//            long currentTime = System.nanoTime(); // Returns the current value of the running JVM's high-res time source in nanoseconds
+//            System.out.println("Current time: " + currentTime);
+
+            // 1. UPDATE: update information such as character position
+            update();
+
+            // 2. DRAW: draw the screen with the updated information
+            repaint(); // Calls the paintComponent(Graphics g) below
+
+            try {
+                double remainingTime = nextDrawTime - System.nanoTime();
+                remainingTime /= 1_000_000; // Convert nanoseconds to milliseconds
+
+                if (remainingTime < 0) {
+                    remainingTime = 0;
+                }
+
+                Thread.sleep((long) remainingTime);
+
+                nextDrawTime += drawInterval;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void update() {
+        // Movement is grid-based (top-left tile is located on (0, 0))
+        if (keyH.upPressed) {
+            playerY -= playerSpeed;
+        }
+        else if (keyH.downPressed) {
+            playerY += playerSpeed;
+        }
+        else if (keyH.leftPressed) {
+            playerX -= playerSpeed;
+        }
+        else if (keyH.rightPressed) {
+            playerX += playerSpeed;
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Graphics2D class extends the Graphics class to provide
+        // more sophisticated control over geometry, coordinate
+        // transformations, color management, and text layout.
+        Graphics2D g2 = (Graphics2D) g;
+
+        g2.setColor(Color.WHITE);
+        g2.fillRect(playerX, playerY, tileSize, tileSize);
+
+        // Dispose of this graphics context and release any system resources
+        // that it is using.
+        g2.dispose();
+    }
+}
