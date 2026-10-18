@@ -8,3 +8,13 @@ By Mark Jason T. Galang ([@markjasongalang](https://github.com/markjasongalang))
 
 Hello everyone! I'm interested in making games using vanilla Java so I decided
 to follow along with [RyiSnow](https://www.youtube.com/@RyiSnow/)'s tutorial playlist called [How to Make a 2D Game in Java](https://www.youtube.com/watch?v=om59cwR7psI&list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq).
+
+## Checklist
+
+- [x] Game Loop and Key Input
+- [x] Sprites and Animation
+- [x] Reading Resource Files
+- [x] Drawing Tiles
+- [x] World and Camera
+- [x] Collision Detection
+- [ ] Object Placement
