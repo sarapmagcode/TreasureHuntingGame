@@ -17,4 +17,5 @@ to follow along with [RyiSnow](https://www.youtube.com/@RyiSnow/)'s tutorial pla
 - [x] Drawing Tiles
 - [x] World and Camera
 - [x] Collision Detection
-- [ ] Object Placement
+- [x] Object Placement
+- [ ] Object Interaction
