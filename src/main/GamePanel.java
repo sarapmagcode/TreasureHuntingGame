@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -30,12 +31,9 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
-
-    // Set player's default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+    public SuperObject[] obj = new SuperObject[10]; // Display up to 10 objects at the same time
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -47,6 +45,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.addKeyListener(keyH);
         this.setFocusable(true); // With this, GamePanel can be "focused" to receive key input.
+    }
+
+    /**
+     * We created this method so we can add other setup stuff in the future.
+     */
+    public void setupGame() {
+        aSetter.setObject();
     }
 
     public void startGameThread() {
@@ -143,8 +148,19 @@ public class GamePanel extends JPanel implements Runnable {
         // transformations, color management, and text layout.
         Graphics2D g2 = (Graphics2D) g;
 
-        // It's a like a layer
+        // It's a like a layer:
+
+        // TILE
         tileM.draw(g2); // Draw this first
+
+        // OBJECT
+        for (int i = 0; i < obj.length; i++) {
+            if (obj[i] != null) {
+                obj[i].draw(g2, this);
+            }
+        }
+
+        // PLAYER
         player.draw(g2);
 
         // Dispose of this graphics context and release any system resources
